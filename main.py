@@ -2,11 +2,11 @@ import random
 from cogs import *
 
 login()
-os.system("clear")
+os.system("cls")
 load_save()
 fake_load()
 while Player.health > 0:
-    os.system("clear")
+    os.system("cls")
     print("Forum Romanum - Roman Forum (Hub)\n [1] Explorare (Explore)\n [2] Shop (Shop)\n [3] View Stats"
           "\n [4] Gladiator (Gladiator)\n")
     move = int(input("$"))
@@ -37,7 +37,7 @@ while Player.health > 0:
                 calculate_skill()
                 print(f"Successfully purchased {Actions.shop[buy]} for {Actions.shopMoney[buy]}! Gratulationes!"
                       f"\nYou have {Player.money} left.")
-                os.system("clear")
+                os.system("cls")
                 # backup
                 edit_txt("money.txt", Player.index, str(Player.money))
                 edit_txt("weapon.txt", Player.index, Actions.shop[buy])

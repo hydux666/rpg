@@ -103,14 +103,14 @@ def find_index(word, items):
 
 
 def login():
-    os.system("clear")
+    os.system("cls")
     login_choice = int(input("[1] Login\n[2] Register\n$"))
     if login_choice == 1:
         user = str(input("Username: "))
         if find_index(user, read_txt("users.txt")) == 'Fail':
             print("Invalid username.")
             time.sleep(2)
-            os.system("clear")
+            os.system("cls")
             login()
         else:
             print(f"Authentication successful. Welcome back, {user}")
@@ -121,7 +121,7 @@ def login():
         users = read_txt("users.txt")
         if len(user) > 20 or len(user) < 0:
             print("Too long / Too short.")
-            os.system("clear")
+            os.system("cls")
             login()
             time.sleep(2)
         elif find_index(user, users) == "Fail":
@@ -132,8 +132,8 @@ def login():
             add_txt("skill.txt", "0")
             add_txt("skillWeapon.txt", "0")
             add_txt("skillArmour.txt", "0")
-            os.system("clear")
+            os.system("cls")
             print("Registration successful. Welcome to RPG game. Restarting Process...")
             time.sleep(2)
-            os.system("clear")
+            os.system("cls")
             login()
