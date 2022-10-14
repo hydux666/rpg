@@ -1,5 +1,6 @@
 import os
 import time
+import random
 
 
 class Player:
@@ -23,9 +24,16 @@ class Actions:
             "Celeres' Ancient Bronze Plate", "Decurion's Iron Armour", "Primus Ordinis' Sturdy Gold Armour",
             "Palatini's Massive Platinum Plating", "Julius Caesar's Mystical Robe"]
     shopMoney = [0, 30, 50, 70, 90, 130, 170, 30, 50, 70, 90, 130, 200]
-    enemies = [
 
+
+class Enemies:
+    names = [
+        "Hastatus", "Ptolemaic Slave", "Barbarian Tribal Slave", "Spartacus' Slave", "Princeps", "Ptolemaic Spear "
+                                                                                                 "Wielder",
+        "Barbaric Fanatic", "Spartacus' Archer", "Centurion", "Ptolemaic Nobleman", "Barbaric Chieftain",
+        "Spartacus' Riot Leader", "Crassus⭐", "Varinius⭐", "Ptolemy Auletes⭐", "Vercingetorix⭐", "Spartacus⭐⭐"
     ]
+    skill = [8, 6, 6, 6, 16, 14, 14, 14, 24, 22, 22, 22, 35, 35, 35, 35, 37]
 
 
 def load_save():
@@ -71,7 +79,6 @@ def read_txt(txt):
     file = open(txt, 'r')
     content = file.readlines()
     return content
-    file.close()
 
 
 def add_txt(txt, text):
@@ -137,3 +144,55 @@ def login():
             time.sleep(2)
             os.system("cls")
             login()
+
+def fight():
+    if Player.skill <= 10:
+        sindex = random.randint(0, 3)
+    elif Player.skill <= 18:
+        sindex = random.randint(4, 7)
+    elif Player.skill <= 26:
+        sindex = random.randint(8, 11)
+    elif Player.skill <= 37:
+        sindex = random.randint(12, 16)
+    enemy = Enemies.names[sindex]
+    enemySkill = Enemies.skill[sindex]
+    enemyHealth = enemySkill * 10
+    defper = 1
+    print(f"\nYou will be battling against... {enemy}!\n Enemy Health: {enemyHealth}\n Enemy Skill: {enemySkill}"
+          f"\nPress any key to continue")
+    input("$")
+    os.system("clear")
+    time.sleep(2)
+    print(
+        f"Your health: {Player.health}\nEnemy health: {enemyHealth}\n 1. Attack with {Player.weapon}\n "
+        f"2. Defend with {Player.armour}\n 3. Heal up")
+    move = int(input("$"))
+    if move == 1:
+        damage = random.randint(((Player.skill * 3) - 2), ((Player.skill * 3) + 2))
+        enemyHealth -= damage
+        edamage = random.randint(round(enemySkill * 0.75 - 3), round(enemySkill * 0.75 + 3)) * defper
+        Player.health -= edamage
+        print(f"You did {damage} to the {enemy}, leaving him at {enemyHealth}!\nThe {enemy} did {edamage} to you"
+              f", leaving you at {Player.health}!")
+    elif move == 2:
+        defper -= 5/100
+        edamage = random.randint(round(enemySkill * 0.75 - 3), round(enemySkill * 0.75 + 3)) * defper
+        Player.health -= edamage
+        sdefper = 1-defper
+        print(f"You utilised your armour, gaining 5% damage reduction! You now have {sdefper} damage"
+              f" reduction\n The {enemy} did"
+              f"{edamage} to you, leaving you at {Player.health}!")
+    elif move == 3:
+        edamage = random.randint(round(enemySkill * 0.75 - 3), round(enemySkill * 0.75 + 3)) * defper
+        Player.health -= edamage
+        chance = random.randint(1, 4)
+        if chance != 1:
+            heal = random.randint(Player.skill - 5, Player.skill + 2)
+            Player.health += heal
+            print(f"The {enemy} did {edamage} to you, however you managed to heal yourself for {heal} health,"
+                  f"leaving you at {Player.health}")
+        elif chance == 1:
+            print(f"The {enemy} did {edamage} to you\nYou tried to heal, but failed in the process. You"
+                  f" were left with {Player.health} left")
+
+

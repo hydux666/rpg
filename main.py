@@ -55,12 +55,12 @@ while Player.health > 0:
                 edit_txt("armour.txt", Player.index, Actions.shop[buy])
                 edit_txt("skillArmour.txt", Player.index, Actions.shopMoney[buy])
                 edit_txt("skill.txt", Player.index, Player.skill)
+            if Player.money < Actions.shopMoney[buy]:
+                print("Not enough cash.")
+                time.sleep(1.2)
         elif final == "N":
             print("Returning to forum now...")
             time.sleep(2)
-        else:
-            print("NT, NT.\n Now wait for 4 seconds as a punishment")
-            time.sleep("4")
     elif move == 3:
         print(f"""
                 Viewing stats:
@@ -70,4 +70,14 @@ while Player.health > 0:
                 Armour : {Player.armour}
                 Skill : {Player.skill}
         """)
-        time.sleep(1.2)
+    elif move == 4:
+        print("Are you sure that you want to enter the arena? Y/N")
+        decision = str(input("$"))
+        if decision == "Y":
+            while Player.health > 0:
+                fight()
+        elif decision == "N":
+            print("Leaving the arena...")
+            time.sleep(2)
+
+    time.sleep(5)
