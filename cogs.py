@@ -8,11 +8,12 @@ class Player:
     money = 0
     weapon = "Unarmed"
     armour = "Unarmed"
-    health = 100
+    health = 150
     index = 0
     skillArmour = 0
     skillWeapon = 0
     skill = 0
+    alive = True
 
 
 class Actions:
@@ -33,7 +34,7 @@ class Enemies:
         "Barbaric Fanatic", "Spartacus' Archer", "Centurion", "Ptolemaic Nobleman", "Barbaric Chieftain",
         "Spartacus' Riot Leader", "Crassus⭐", "Varinius⭐", "Ptolemy Auletes⭐", "Vercingetorix⭐", "Spartacus⭐⭐"
     ]
-    skill = [8, 6, 6, 6, 16, 14, 14, 14, 24, 22, 22, 22, 35, 35, 35, 35, 37]
+    skill = [8, 6, 6, 6, 16, 14, 14, 14, 24, 22, 22, 22, 33, 33, 33, 33, 35]
 
 
 def load_save():
@@ -44,6 +45,7 @@ def load_save():
     weapon_list = read_txt("weapon.txt")
     skillWeapon_list = read_txt("skillWeapon.txt")
     skillArmour_list = read_txt("skillArmour.txt")
+    alive_list = read_txt("alive.txt")
     skill_list = read_txt("skill.txt")
     Player.money = int(money_list[index].replace("\n", ""))
     Player.armour = armour_list[index].replace("\n", "")
@@ -51,6 +53,8 @@ def load_save():
     Player.skillWeapon = int(skillWeapon_list[index].replace("\n", ""))
     Player.skillArmour = int(skillArmour_list[index].replace("\n", ""))
     Player.skill = float(skill_list[index].replace("\n", ""))
+    Player.alive = int(alive_list[index].replace("\n", ""))
+
     Player.index = index
 
 
@@ -126,11 +130,11 @@ def login():
     if login_choice == 2:
         user = str(input("Enter your desired username: "))
         users = read_txt("users.txt")
-        if len(user) > 20 or len(user) < 0:
+        if len(user) > 20 or len(user) < 2:
             print("Too long / Too short.")
             os.system("cls")
-            login()
             time.sleep(2)
+            login()
         elif find_index(user, users) == "Fail":
             add_txt("users.txt", user)
             add_txt("money.txt", "0")
@@ -139,60 +143,10 @@ def login():
             add_txt("skill.txt", "0")
             add_txt("skillWeapon.txt", "0")
             add_txt("skillArmour.txt", "0")
+            add_txt("alive.txt", "\n1")
             os.system("cls")
             print("Registration successful. Welcome to RPG game. Restarting Process...")
             time.sleep(2)
             os.system("cls")
             login()
-
-def fight():
-    if Player.skill <= 10:
-        sindex = random.randint(0, 3)
-    elif Player.skill <= 18:
-        sindex = random.randint(4, 7)
-    elif Player.skill <= 26:
-        sindex = random.randint(8, 11)
-    elif Player.skill <= 37:
-        sindex = random.randint(12, 16)
-    enemy = Enemies.names[sindex]
-    enemySkill = Enemies.skill[sindex]
-    enemyHealth = enemySkill * 10
-    defper = 1
-    print(f"\nYou will be battling against... {enemy}!\n Enemy Health: {enemyHealth}\n Enemy Skill: {enemySkill}"
-          f"\nPress any key to continue")
-    input("$")
-    os.system("clear")
-    time.sleep(2)
-    print(
-        f"Your health: {Player.health}\nEnemy health: {enemyHealth}\n 1. Attack with {Player.weapon}\n "
-        f"2. Defend with {Player.armour}\n 3. Heal up")
-    move = int(input("$"))
-    if move == 1:
-        damage = random.randint(((Player.skill * 3) - 2), ((Player.skill * 3) + 2))
-        enemyHealth -= damage
-        edamage = random.randint(round(enemySkill * 0.75 - 3), round(enemySkill * 0.75 + 3)) * defper
-        Player.health -= edamage
-        print(f"You did {damage} to the {enemy}, leaving him at {enemyHealth}!\nThe {enemy} did {edamage} to you"
-              f", leaving you at {Player.health}!")
-    elif move == 2:
-        defper -= 5/100
-        edamage = random.randint(round(enemySkill * 0.75 - 3), round(enemySkill * 0.75 + 3)) * defper
-        Player.health -= edamage
-        sdefper = 1-defper
-        print(f"You utilised your armour, gaining 5% damage reduction! You now have {sdefper} damage"
-              f" reduction\n The {enemy} did"
-              f"{edamage} to you, leaving you at {Player.health}!")
-    elif move == 3:
-        edamage = random.randint(round(enemySkill * 0.75 - 3), round(enemySkill * 0.75 + 3)) * defper
-        Player.health -= edamage
-        chance = random.randint(1, 4)
-        if chance != 1:
-            heal = random.randint(Player.skill - 5, Player.skill + 2)
-            Player.health += heal
-            print(f"The {enemy} did {edamage} to you, however you managed to heal yourself for {heal} health,"
-                  f"leaving you at {Player.health}")
-        elif chance == 1:
-            print(f"The {enemy} did {edamage} to you\nYou tried to heal, but failed in the process. You"
-                  f" were left with {Player.health} left")
-
 
